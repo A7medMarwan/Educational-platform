@@ -18,7 +18,7 @@ const cardStyle = {
   boxShadow: "0 4px 24px 0 rgba(30,140,89,0.13)",
   borderRadius: "18px",
   padding: "2.2rem 1.5rem 1.5rem 1.5rem",
-  background: "#fff",
+  background: "var(--secondary)",
   margin: "0.8rem",
   flex: "1 1 260px",
   minWidth: "240px",

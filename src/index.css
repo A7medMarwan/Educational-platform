@@ -145,3 +145,8 @@ h3 {
   padding: 10px;
   background-size: 60% 60%;
 }
+
+.navbar-toggler {
+  background-color: white !important;
+  
+}

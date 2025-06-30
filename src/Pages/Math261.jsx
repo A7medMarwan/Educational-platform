@@ -99,6 +99,7 @@ export default function Math261() {
   const [search, setSearch] = useState("");
   const filteredPdfs = pdfFiles.filter(f => f.display.toLowerCase().includes(search.toLowerCase()));
   return (
+    <div style={{ background: "var(--secondary)" }}>
     <div style={{ maxWidth: 1200, margin: "0 auto", padding: "2rem 1rem" }}>
       <h1 style={{ textAlign: "center", color: "#0d2c1f", marginBottom: "2rem", fontSize: "2rem", fontWeight: 700 }}>
         تحميل الملفات
@@ -133,6 +134,7 @@ export default function Math261() {
           </div>
         ))}
       </div>
+    </div>
     </div>
   );
 }
