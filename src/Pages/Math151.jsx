@@ -43,6 +43,7 @@ const containerStyle = {
   justifyContent: "center",
   gap: "1.2rem",
   padding: "1.5rem 0",
+  background: "var(--secondary)",
 };
 
 const linkStyle = {
@@ -101,7 +102,8 @@ export default function Math151() {
   const [search, setSearch] = useState("");
   const filteredPdfs = pdfFiles.filter(f => f.display.toLowerCase().includes(search.toLowerCase()));
   return (
-    <div style={{ maxWidth: 1200, margin: "0 auto", padding: "2rem 1rem" }}>
+    <div style={{ background: "var(--secondary)" }}>
+    <div style={{ maxWidth: 1200,  margin: "0 auto", padding: "2rem 1rem" }}>
       <h1 style={{ textAlign: "center", color: "#0d2c1f", marginBottom: "2rem", fontSize: "2rem", fontWeight: 700 }}>
         تحميل الملفات
       </h1>
@@ -135,6 +137,7 @@ export default function Math151() {
           </div>
         ))}
       </div>
+    </div>
     </div>
   );
 }
