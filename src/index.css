@@ -1,7 +1,7 @@
 :root {
   --primary: #1e8c59;
   --primary-dark: #0d2c1f;
-  --secondary: #f5f5f5;
+  --secondary: #f0fdf7;
   --text: #1a1a1a;
   --white: #ffffff;
 }
@@ -102,4 +102,46 @@ h3 {
   color: var(--white) !important;
   padding: 1rem;
   text-align: center;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+@keyframes floatHorizontal {
+  0% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(-20px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.animate-right-image {
+  animation: floatHorizontal 3s ease-in-out infinite;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeUp {
+  animation: fadeUp 1s ease-in-out;
+}
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  background-color: var(--primary-dark) !important; /* لون أوضح */
+  border-radius: 50%;
+  padding: 10px;
+  background-size: 60% 60%;
 }
