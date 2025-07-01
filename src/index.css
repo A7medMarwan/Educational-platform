@@ -1,3 +1,4 @@
+
 :root {
   --primary: #1e8c59;
   --primary-dark: #0d2c1f;
@@ -106,9 +107,13 @@ h3 {
   bottom: 0;
   width: 100%;
   z-index: 1000;
+ 
+}
+.footer p{
+  margin: 0;
 }
 
-@keyframes floatHorizontal {
+/* @keyframes floatHorizontal {
   0% {
     transform: translateX(0);
   }
@@ -118,7 +123,7 @@ h3 {
   100% {
     transform: translateX(0);
   }
-}
+} */
 
 .animate-right-image {
   animation: floatHorizontal 3s ease-in-out infinite;
