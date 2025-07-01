@@ -53,8 +53,8 @@ export default function SubjectsCarousel() {
 
   return (
     <section
-      className="py-5 px-3 subjects-carousel"
-      style={{ backgroundColor: "var(--secondary)" }}
+      className=" px-3 subjects-carousel"
+      style={{ backgroundColor: "var(--secondary)" , paddingBottom: "100px" , paddingTop: "50px" }}
     >
       <h2 className="text-center mb-4" style={{ color: "var(--primary-dark)" }}>
         مقررات الرياضيات
