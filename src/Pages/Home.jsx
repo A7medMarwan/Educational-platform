@@ -110,7 +110,7 @@ export default function Home() {
       <SubjectsCarousel />
 
       {/* فراغ بسيط إضافي قبل الفوتر (اختياري) */}
-      <div style={{ height: "80px" }}></div>
+      {/* <div style={{ height: "80px" }}></div> */}
     </>
   );
 }

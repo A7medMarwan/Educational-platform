@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import FileUpload from "../Components/FileUpload/FileUpload";
 
 const pdfFiles = [
   { name: "بطاقة علاجية تفاعلية المتتابعات كدوال.pdf", display: "بطاقة علاجية: المتتابعات كدوال" },
@@ -29,8 +30,9 @@ const cardStyle = {
 
 const cardHoverStyle = {
   boxShadow: "0 8px 32px 0 rgba(30,140,89,0.22)",
-  border: "2px solid #0d2c1f",
-  transform: "translateY(-6px) scale(1.03)",
+  border: "2px solid #1e8c59",
+  transform: "translateY(-8px) scale(1.045)",
+  background: "linear-gradient(135deg, #f1fff8 60%, #d0f5e8 100%)"
 };
 
 const containerStyle = {
@@ -97,7 +99,13 @@ export default function Math362() {
   const [search, setSearch] = useState("");
   const filteredPdfs = pdfFiles.filter(f => f.display.toLowerCase().includes(search.toLowerCase()));
   return (
-    <div style={{ background: "var(--secondary)" }}>
+    <div style={{ background: "var(--secondary)", paddingBlock: "20px" }}>
+      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "2rem 1rem" }}>
+        <h1 style={{ textAlign: "center", color: "#0d2c1f", marginBottom: "2rem", fontSize: "2rem", fontWeight: 700 }}>
+          تحميل الملفات
+        </h1>
+        <FileUpload />
+        <div style={{ background: "var(--secondary)" }}>
     <div style={{ maxWidth: 1200, margin: "0 auto", padding: "2rem 1rem" }}>
       <h1 style={{ textAlign: "center", color: "#0d2c1f", marginBottom: "2rem", fontSize: "2rem", fontWeight: 700 }}>
         تحميل الملفات
@@ -133,6 +141,8 @@ export default function Math362() {
         ))}
       </div>
     </div>
+    </div>
+      </div>
     </div>
   );
 }
