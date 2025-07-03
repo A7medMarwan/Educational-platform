@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import FileUpload from "../Components/FileUpload/FileUpload";
+import { supabase } from '../supabaseClient';
 
 const pdfFiles = [
   { name: "بطاقة علاجية تفاعلية المتتابعات كدوال.pdf", display: "بطاقة علاجية: المتتابعات كدوال" },
@@ -97,6 +98,22 @@ const searchInputStyle = {
 export default function Math362() {
   const [hovered, setHovered] = useState(null);
   const [search, setSearch] = useState("");
+  const [uploadedFiles, setUploadedFiles] = useState([]);
+
+  const fetchUploadedFiles = async () => {
+    const { data, error } = await supabase.storage
+      .from('uploads')
+      .list('math362/', { limit: 100, offset: 0 });
+    // Use file extension-based filtering like other components
+    const validExtensions = ['.pdf', '.mp4', '.doc', '.docx'];
+    setUploadedFiles(
+      data.filter(f =>
+        f.name &&
+        validExtensions.some(ext => f.name.toLowerCase().endsWith(ext))
+      )
+    );
+  };
+
   const filteredPdfs = pdfFiles.filter(f => f.display.toLowerCase().includes(search.toLowerCase()));
   return (
     <div style={{ background: "var(--secondary)", paddingBlock: "20px" }}>
