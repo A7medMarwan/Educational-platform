@@ -1,18 +1,41 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
+import { supabase } from "../../supabaseClient.js";
 
-export default function FileUpload({ onFilesAdded }) {
+export default function FileUpload({ onFilesAdded, folderName = 'math151', onFilesListed }) {
   const [files, setFiles] = useState([]);
   const [authorized, setAuthorized] = useState(false);
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [uploading, setUploading] = useState(false);
   const inputRef = useRef();
 
-  const handleFileChange = (e) => {
+  // Fetch files from Supabase Storage
+  useEffect(() => {
+    const fetchFiles = async () => {
+      if (!authorized) return;
+      const { data, error } = await supabase.storage
+        .from('uploads')
+        .list(folderName + '/', { limit: 100, offset: 0 });
+      if (onFilesListed) onFilesListed(data ? data.filter(f => f.name) : [], uploading);
+    };
+    fetchFiles();
+    // eslint-disable-next-line
+  }, [folderName, authorized, uploading]);
+
+  // Handle file upload to Supabase
+  const handleFileChange = async (e) => {
     const selectedFiles = Array.from(e.target.files);
     setFiles(selectedFiles);
     if (onFilesAdded) {
       onFilesAdded(selectedFiles);
     }
+    setUploading(true);
+    for (const file of selectedFiles) {
+      await supabase.storage
+        .from('uploads')
+        .upload(`${folderName}/${file.name}`, file, { upsert: true });
+    }
+    setUploading(false);
   };
 
   const handleDrop = (e) => {
@@ -40,6 +63,11 @@ export default function FileUpload({ onFilesAdded }) {
     } else {
       setError("كلمة المرور غير صحيحة. الرجاء المحاولة مرة أخرى.");
     }
+  };
+
+  // Get public URL for a file
+  const getPublicUrl = (fileName) => {
+    return supabase.storage.from('uploads').getPublicUrl(`${folderName}/${fileName}`).data.publicUrl;
   };
 
   return (
@@ -159,6 +187,7 @@ export default function FileUpload({ onFilesAdded }) {
               </ul>
             </div>
           )}
+          {uploading && <p>Uploading...</p>}
         </>
       )}
     </div>
