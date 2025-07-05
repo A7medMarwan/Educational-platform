@@ -2,7 +2,12 @@ import React, { useEffect, useState } from "react";
 import MyNavbar from "./Components/Navbar/Navbar";
 import Splash from "./Components/Splash/Splash";
 import Home from "./Pages/Home";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import Math151 from "./Pages/Math151";
 import Math152 from "./Pages/Math152";
 import Math253 from "./Pages/Math253";
@@ -15,10 +20,13 @@ import Math363 from "./Pages/Math363";
 import Math364 from "./Pages/Math364";
 import Math365 from "./Pages/Math365";
 import Math366 from "./Pages/Math366";
+import Login from "./Pages/Login";
+import { useAuth } from "./Context/AuthContext";
 import MainLayout from "./Layouts/MainLayout";
 
 export default function App() {
   const [loading, setLoading] = useState(true);
+  const { isLoggedIn } = useAuth();
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -35,7 +43,13 @@ export default function App() {
     <div>
       <Router>
         <Routes>
-          <Route path="/" element={<MainLayout />}>
+          <Route path="/login" element={<Login />} />
+          <Route
+            path="/"
+            element={
+              isLoggedIn ? <MainLayout /> : <Navigate to="/login" replace />
+            }
+          >
             <Route index element={<Home />} />
             <Route path="math151" element={<Math151 />} />
             <Route path="math152" element={<Math152 />} />
