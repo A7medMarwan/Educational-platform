@@ -23,10 +23,11 @@ import Math366 from "./Pages/Math366";
 import Login from "./Pages/Login";
 import { useAuth } from "./Context/AuthContext";
 import MainLayout from "./Layouts/MainLayout";
+import AdminLayout from "./Layouts/AdminLayout";
 
 export default function App() {
   const [loading, setLoading] = useState(true);
-  const { isLoggedIn } = useAuth();
+  const { isLoggedIn, userRole } = useAuth();
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -47,7 +48,11 @@ export default function App() {
           <Route
             path="/"
             element={
-              isLoggedIn ? <MainLayout /> : <Navigate to="/login" replace />
+              isLoggedIn && userRole === "admin" ? (
+                <AdminLayout />
+              ) : (
+                <MainLayout />
+              )
             }
           >
             <Route index element={<Home />} />

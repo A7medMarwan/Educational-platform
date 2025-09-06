@@ -1,14 +1,30 @@
 import React, { useState } from "react";
 import FileUpload from "../Components/FileUpload/FileUpload";
-import { supabase } from '../supabaseClient';
+import { supabase } from "../supabaseClient";
+import { useAuth } from "../Context/AuthContext";
 
 const pdfFiles = [
-  { name: "بطاقة علاجية تفاعلية المتتابعات كدوال.pdf", display: "بطاقة علاجية: المتتابعات كدوال" },
-  { name: "بطاقة علاجية مجموعة الأعداد الحقيقية.pdf", display: "بطاقة علاجية: مجموعة الأعداد الحقيقية" },
-  { name: "‫‫بطاقة علاجية تعيين النقاط على المستوى البياني.pdf", display: "بطاقة علاجية: تعيين النقاط على المستوى البياني" },
-  { name: "‫‫بطاقة عمل 1-حل المعادلة الخطية 1.pdf", display: "بطاقة عمل: حل المعادلة الخطية 1" },
+  {
+    name: "بطاقة علاجية تفاعلية المتتابعات كدوال.pdf",
+    display: "بطاقة علاجية: المتتابعات كدوال",
+  },
+  {
+    name: "بطاقة علاجية مجموعة الأعداد الحقيقية.pdf",
+    display: "بطاقة علاجية: مجموعة الأعداد الحقيقية",
+  },
+  {
+    name: "‫‫بطاقة علاجية تعيين النقاط على المستوى البياني.pdf",
+    display: "بطاقة علاجية: تعيين النقاط على المستوى البياني",
+  },
+  {
+    name: "‫‫بطاقة عمل 1-حل المعادلة الخطية 1.pdf",
+    display: "بطاقة عمل: حل المعادلة الخطية 1",
+  },
   { name: "‫‫‫بطاقة علاجية التحليل 1.pdf", display: "بطاقة علاجية: التحليل 1" },
-  { name: "‫‫‫‫بطاقة علاجية التحليل 2.pdf", display: "بطاقة علاجية: التحليل 2" },
+  {
+    name: "‫‫‫‫بطاقة علاجية التحليل 2.pdf",
+    display: "بطاقة علاجية: التحليل 2",
+  },
 ];
 
 const cardStyle = {
@@ -33,7 +49,7 @@ const cardHoverStyle = {
   boxShadow: "0 8px 32px 0 rgba(30,140,89,0.22)",
   border: "2px solid #1e8c59",
   transform: "translateY(-8px) scale(1.045)",
-  background: "linear-gradient(135deg, #f1fff8 60%, #d0f5e8 100%)"
+  background: "linear-gradient(135deg, #f1fff8 60%, #d0f5e8 100%)",
 };
 
 const containerStyle = {
@@ -96,69 +112,96 @@ const searchInputStyle = {
 };
 
 export default function Math362() {
+  const { isLoggedIn, userRole } = useAuth();
   const [hovered, setHovered] = useState(null);
   const [search, setSearch] = useState("");
   const [uploadedFiles, setUploadedFiles] = useState([]);
 
   const fetchUploadedFiles = async () => {
-    const { data, error } = await supabase.storage
-      .from('uploads')
-      .list('math362/', { limit: 100, offset: 0 });
+    const { data } = await supabase.storage
+      .from("uploads")
+      .list("math362/", { limit: 100, offset: 0 });
     // Use file extension-based filtering like other components
-    const validExtensions = ['.pdf', '.mp4', '.doc', '.docx'];
+    const validExtensions = [".pdf", ".mp4", ".doc", ".docx"];
     setUploadedFiles(
-      data.filter(f =>
-        f.name &&
-        validExtensions.some(ext => f.name.toLowerCase().endsWith(ext))
+      data.filter(
+        (f) =>
+          f.name &&
+          validExtensions.some((ext) => f.name.toLowerCase().endsWith(ext))
       )
     );
   };
 
-  const filteredPdfs = pdfFiles.filter(f => f.display.toLowerCase().includes(search.toLowerCase()));
+  // Handler to refresh uploaded files after upload
+  const handleUpload = () => {
+    fetchUploadedFiles();
+  };
+
+  const filteredPdfs = pdfFiles.filter((f) =>
+    f.display.toLowerCase().includes(search.toLowerCase())
+  );
   return (
     <div style={{ background: "var(--secondary)", paddingBlock: "20px" }}>
       <div style={{ maxWidth: 1200, margin: "0 auto", padding: "2rem 1rem" }}>
-        <h1 style={{ textAlign: "center", color: "#0d2c1f", marginBottom: "2rem", fontSize: "2rem", fontWeight: 700 }}>
-          تحميل الملفات
-        </h1>
-        <FileUpload />
+        {isLoggedIn && userRole === "admin" && (
+          <>
+            <FileUpload
+              folderName="math362"
+              onFilesAdded={handleUpload}
+              isAdmin={true}
+            />
+          </>
+        )}
         <div style={{ background: "var(--secondary)" }}>
-    <div style={{ maxWidth: 1200, margin: "0 auto", padding: "2rem 1rem" }}>
-      <h1 style={{ textAlign: "center", color: "#0d2c1f", marginBottom: "2rem", fontSize: "2rem", fontWeight: 700 }}>
-        تحميل الملفات
-      </h1>
-      <input
-        type="text"
-        placeholder="ابحث عن ملف..."
-        value={search}
-        onChange={e => setSearch(e.target.value)}
-        style={searchInputStyle}
-      />
-      <div style={containerStyle}>
-        {filteredPdfs.map((file, idx) => (
           <div
-            key={file.name}
-            style={hovered === idx ? { ...cardStyle, ...cardHoverStyle } : cardStyle}
-            onMouseEnter={() => setHovered(idx)}
-            onMouseLeave={() => setHovered(null)}
+            style={{ maxWidth: 1200, margin: "0 auto", padding: "2rem 1rem" }}
           >
-            <span style={pdfIconStyle}>
-              <svg width="1em" height="1em" viewBox="0 0 32 32" fill="currentColor" style={{verticalAlign:'middle'}}><path d="M6 2c-1.104 0-2 .896-2 2v24c0 1.104.896 2 2 2h20c1.104 0 2-.896 2-2V10.828A2 2 0 0027.414 9.414l-6.828-6.828A2 2 0 0018.172 2H6zm0 2h12v7c0 1.104.896 2 2 2h7v15a1 1 0 01-1 1H6a1 1 0 01-1-1V4a1 1 0 011-1zm14 0.414L25.586 10H20a1 1 0 01-1-1V4.414zM9 15h2.5c1.379 0 2.5 1.121 2.5 2.5S12.879 20 11.5 20H9v-5zm1 1v3h1.5a1.5 1.5 0 000-3H10zm5 0h1.25c.414 0 .75.336.75.75V20h-1v-1h-1v1h-1v-3.25c0-.414.336-.75.75-.75zm.75 1.5H16v1h-1v-1zm3.25-1.5h2c.414 0 .75.336.75.75v.5a.75.75 0 01-.75.75h-1.25V20h-1v-5zm1 1v1h1v-1h-1z"></path></svg>
-            </span>
-            <span style={cardTitleStyle}>{file.display}</span>
-            <a
-              href={`/Assets/Materials/ريض 362/${encodeURIComponent(file.name)}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={linkStyle}
-            >
-              فتح وتحميل
-            </a>
+            <input
+              type="text"
+              placeholder="ابحث عن ملف..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              style={searchInputStyle}
+            />
+            <div style={containerStyle}>
+              {filteredPdfs.map((file, idx) => (
+                <div
+                  key={file.name}
+                  style={
+                    hovered === idx
+                      ? { ...cardStyle, ...cardHoverStyle }
+                      : cardStyle
+                  }
+                  onMouseEnter={() => setHovered(idx)}
+                  onMouseLeave={() => setHovered(null)}
+                >
+                  <span style={pdfIconStyle}>
+                    <svg
+                      width="1em"
+                      height="1em"
+                      viewBox="0 0 32 32"
+                      fill="currentColor"
+                      style={{ verticalAlign: "middle" }}
+                    >
+                      <path d="M6 2c-1.104 0-2 .896-2 2v24c0 1.104.896 2 2 2h20c1.104 0 2-.896 2-2V10.828A2 2 0 0027.414 9.414l-6.828-6.828A2 2 0 0018.172 2H6zm0 2h12v7c0 1.104.896 2 2 2h7v15a1 1 0 01-1 1H6a1 1 0 01-1-1V4a1 1 0 011-1zm14 0.414L25.586 10H20a1 1 0 01-1-1V4.414zM9 15h2.5c1.379 0 2.5 1.121 2.5 2.5S12.879 20 11.5 20H9v-5zm1 1v3h1.5a1.5 1.5 0 000-3H10zm5 0h1.25c.414 0 .75.336.75.75V20h-1v-1h-1v1h-1v-3.25c0-.414.336-.75.75-.75zm.75 1.5H16v1h-1v-1zm3.25-1.5h2c.414 0 .75.336.75.75v.5a.75.75 0 01-.75.75h-1.25V20h-1v-5zm1 1v1h1v-1h-1z"></path>
+                    </svg>
+                  </span>
+                  <span style={cardTitleStyle}>{file.display}</span>
+                  <a
+                    href={`/Assets/Materials/ريض 362/${encodeURIComponent(
+                      file.name
+                    )}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={linkStyle}
+                  >
+                    فتح وتحميل
+                  </a>
+                </div>
+              ))}
+            </div>
           </div>
-        ))}
-      </div>
-    </div>
-    </div>
+        </div>
       </div>
     </div>
   );
