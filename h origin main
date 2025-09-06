@@ -1,5 +1,0 @@
-[33mb929e8c[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;32mmarwan[m[33m)[m new features
-[33m300657c[m[33m ([m[1;31morigin/marwan[m[33m)[m Add sessionStorage-based login session
-[33mab4ece8[m Remove login persistence to require login on every visit
-[33mbff2269[m login
-[33m0029a2b[m Merge remote-tracking branch 'origin/main' into marwan
